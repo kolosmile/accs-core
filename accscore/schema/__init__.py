@@ -7,7 +7,7 @@ from enum import Enum
 from typing import Dict, List, Optional
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class JobStatus(str, Enum):
@@ -79,8 +79,8 @@ class WorkflowStep(BaseModel):
 
     key: str
     service: str
-    depends_on: List[str] = []
-    default_params: Dict[str, object] = {}
+    depends_on: List[str] = Field(default_factory=list)
+    default_params: Dict[str, object] = Field(default_factory=dict)
 
 
 class WorkflowDef(BaseModel):
@@ -105,7 +105,7 @@ class Job(BaseModel):
     current_task_key: Optional[str] = None
     priority: int = 0
     order_seq: int
-    options: Dict[str, object] = {}
+    options: Dict[str, object] = Field(default_factory=dict)
     scheduled_at: Optional[datetime] = None
     error_code: Optional[str] = None
     error_message: Optional[str] = None
@@ -123,19 +123,20 @@ class JobTask(BaseModel):
     task_key: str
     service_name: str
     status: TaskStatus
-    depends_on: List[str] = []
+    depends_on: List[str] = Field(default_factory=list)
     attempt: int = 0
     max_attempts: int = 3
     next_attempt_at: Optional[datetime] = None
     priority: int = 0
     progress: Optional[float] = None
-    params: Dict[str, object] = {}
-    results: Dict[str, object] = {}
+    params: Dict[str, object] = Field(default_factory=dict)
+    results: Dict[str, object] = Field(default_factory=dict)
     assigned_node: Optional[str] = None
     claimed_by: Optional[str] = None
     claimed_at: Optional[datetime] = None
     started_at: Optional[datetime] = None
     finished_at: Optional[datetime] = None
+    created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
 
@@ -150,7 +151,7 @@ class TaskEvent(BaseModel):
     level: EventLevel
     type: EventType
     message: str
-    data: Dict[str, object] = {}
+    data: Dict[str, object] = Field(default_factory=dict)
 
 
 class TaskArtifact(BaseModel):
@@ -172,14 +173,14 @@ class Node(BaseModel):
     """Service node participating in the workflow."""
 
     name: str
-    labels: Dict[str, object] = {}
+    labels: Dict[str, object] = Field(default_factory=dict)
     last_seen: Optional[datetime] = None
     awake_state: AwakeState = AwakeState.UNKNOWN
     wake_method: Optional[WakeMethod] = None
     mac: Optional[str] = None
     provider_ref: Optional[str] = None
     script: Optional[str] = None
-    max_concurrency: Dict[str, int] = {}
+    max_concurrency: Dict[str, int] = Field(default_factory=dict)
 
 
 __all__ = [

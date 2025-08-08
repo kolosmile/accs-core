@@ -23,3 +23,15 @@ def test_ensure_bucket(monkeypatch):
     storage.client = DummyClient()
     storage.ensure_bucket("test")
     assert "test" in storage.client.created
+
+
+def test_build_key(monkeypatch):
+    monkeypatch.setenv("MINIO_ENDPOINT", "localhost:9000")
+    monkeypatch.setenv("MINIO_ACCESS_KEY", "key")
+    monkeypatch.setenv("MINIO_SECRET_KEY", "secret")
+    monkeypatch.setenv("POSTGRES_DSN", "sqlite:///:memory:")
+    from accscore import storage
+
+    reload(storage)
+    key = storage.build_key("job1", "taskA", "inputs", filename="file.txt")
+    assert key == "inputs/job1/taskA/file.txt"
