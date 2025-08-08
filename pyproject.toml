@@ -10,7 +10,8 @@ authors = [{name = "ACCS"}]
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
-    "pydantic>=1.10,<2",
+    "pydantic>=2.7,<3",
+    "pydantic-settings>=2.2",
     "sqlalchemy>=1.4",
     "minio>=7.1.0",
 ]
