@@ -91,6 +91,7 @@ claimed_by TEXT NULL
 claimed_at timestamptz
 started_at timestamptz
 finished_at timestamptz
+created_at timestamptz NOT NULL DEFAULT now()
 updated_at timestamptz
 INDEX(service_name, status)
 INDEX(job_id, status)
@@ -292,6 +293,7 @@ ACC_DB_URL=postgresql+psycopg://user:pass@host:5432/accs
 ACC_MINIO_ENDPOINT=http://minio:9000
 ACC_MINIO_ACCESS_KEY=...
 ACC_MINIO_SECRET_KEY=...
+ACC_MINIO_SECURE=false
 ACC_NODE_NAME=gpu-node-1
 ACC_NODE_LABELS=gpu=true,zone=eu
 ACC_MAX_CONCURRENCY_RENDER=2
