@@ -1,6 +1,6 @@
-"""Environment configuration using Pydantic."""
+"""Environment configuration using Pydantic v2."""
 
-from typing import Optional
+from __future__ import annotations
 
 from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -26,5 +26,5 @@ class Settings(BaseSettings):
     postgres_dsn: str = Field(
         ..., validation_alias=AliasChoices("ACC_DB_URL", "POSTGRES_DSN")
     )
-    rabbitmq_url: Optional[str] = Field(None, validation_alias="RABBITMQ_URL")
-    service_url: Optional[str] = Field(None, validation_alias="SERVICE_URL")
+    rabbitmq_url: str | None = Field(None, validation_alias="RABBITMQ_URL")
+    service_url: str | None = Field(None, validation_alias="SERVICE_URL")

@@ -1,7 +1,7 @@
 """Database utilities using SQLAlchemy."""
 
 from contextlib import contextmanager
-from typing import Iterator, List, Dict, Any, Optional
+from typing import Any, Iterator, Optional
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
@@ -39,7 +39,9 @@ def check_connection() -> bool:
         return False
 
 
-def claim_tasks(session: Session, service: str, capacity: int, agent: str) -> List[Dict[str, Any]]:
+def claim_tasks(
+    session: Session, service: str, capacity: int, agent: str
+) -> list[dict[str, Any]]:
     """Claim queued tasks for a service respecting global job order.
 
     Parameters
@@ -81,7 +83,9 @@ def claim_tasks(session: Session, service: str, capacity: int, agent: str) -> Li
         """
     )
 
-    result = session.execute(sql, {"service": service, "capacity": capacity, "agent": agent})
+    result = session.execute(
+        sql, {"service": service, "capacity": capacity, "agent": agent}
+    )
     return [dict(row) for row in result.mappings()]
 
 
@@ -115,11 +119,15 @@ def mark_task_running(session: Session, task_id: str) -> None:
 
 def update_task_progress(session: Session, task_id: str, percent: float) -> None:
     """Update task progress percentage."""
-    sql = text("UPDATE job_tasks SET progress=:percent, updated_at=now() WHERE id=:task_id")
+    sql = text(
+        "UPDATE job_tasks SET progress=:percent, updated_at=now() WHERE id=:task_id"
+    )
     session.execute(sql, {"task_id": task_id, "percent": percent})
 
 
-def mark_task_done(session: Session, task_id: str, results: Optional[Dict[str, Any]] = None) -> None:
+def mark_task_done(
+    session: Session, task_id: str, results: Optional[dict[str, Any]] = None
+) -> None:
     """Mark a task as done and optionally store results."""
     sql = text(
         "UPDATE job_tasks SET status='done', results=COALESCE(:results, results), finished_at=now() WHERE id=:task_id"
@@ -139,7 +147,10 @@ def mark_task_error(
         WHERE id=:task_id
         """
     )
-    session.execute(sql, {"task_id": task_id, "error_info": {"code": error_code, "message": message}})
+    session.execute(
+        sql,
+        {"task_id": task_id, "error_info": {"code": error_code, "message": message}},
+    )
 
 
 def append_event(
@@ -150,7 +161,7 @@ def append_event(
     level: str = "info",
     type: str = "log",
     message: str = "",
-    data: Optional[Dict[str, Any]] = None,
+    data: Optional[dict[str, Any]] = None,
 ) -> None:
     """Insert a new event row."""
     sql = text(
