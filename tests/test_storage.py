@@ -1,4 +1,5 @@
 from importlib import reload
+from uuid import uuid4
 
 
 def test_ensure_bucket(monkeypatch):
@@ -33,5 +34,6 @@ def test_build_key(monkeypatch):
     from accscore import storage
 
     reload(storage)
-    key = storage.build_key("job1", "taskA", "inputs", filename="file.txt")
-    assert key == "inputs/job1/taskA/file.txt"
+    job_id = uuid4()
+    key = storage.build_key("input", job_id, "taskA", "file.txt")
+    assert key == f"input/{job_id}/taskA/file.txt"
