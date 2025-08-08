@@ -2,7 +2,8 @@
 
 import io
 from datetime import timedelta
-from typing import Optional
+from typing import Literal, Optional
+from uuid import UUID
 
 from minio import Minio
 
@@ -45,16 +46,10 @@ def presign(bucket: str, name: str, expires: timedelta = timedelta(hours=1)) -> 
 
 
 def build_key(
-    job_id: str,
+    kind: Literal["input", "output", "log"],
+    job_id: UUID,
     task_key: str,
-    kind: str,
-    filename: Optional[str] = None,
-    ext: Optional[str] = None,
+    filename: str,
 ) -> str:
     """Construct object storage key according to repository conventions."""
-    base = f"{kind}/{job_id}/{task_key}"
-    if filename:
-        return f"{base}/{filename}"
-    if ext:
-        return f"{base}/{task_key}{ext}"
-    return base + "/"
+    return f"{kind}/{job_id}/{task_key}/{filename}"
