@@ -16,4 +16,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = [
+    "pytest",
+    "testcontainers",
+    "psycopg2-binary",
+]
