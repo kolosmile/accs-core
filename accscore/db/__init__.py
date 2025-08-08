@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, Session
 
-from .settings import Settings
+from ..settings import Settings
 
 
 settings = Settings()
