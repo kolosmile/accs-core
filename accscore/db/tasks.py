@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 from uuid import UUID
 
 from sqlalchemy import text
 from sqlalchemy.engine import Connection
 
 
-JobTaskRow = Dict[str, Any]
+JobTaskRow = dict[str, Any]
 
 
 def _utcnow() -> datetime:
@@ -58,7 +58,7 @@ def select_runnable(
     *,
     conn: Connection,
     now: Optional[datetime] = None,
-) -> List[JobTaskRow]:
+) -> list[JobTaskRow]:
     """Select runnable tasks for a service using row-level locks.
 
     The caller is responsible for running this inside a transaction so that the
@@ -97,7 +97,7 @@ def select_runnable(
 
 
 def claim_tasks(
-    task_ids: List[UUID],
+    task_ids: list[UUID],
     node_name: str,
     *,
     conn: Connection,
@@ -122,4 +122,3 @@ def claim_tasks(
 
     result = conn.execute(sql, {"node": node_name, "now": now, "ids": list(task_ids)})
     return result.rowcount or 0
-

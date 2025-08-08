@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 from datetime import datetime
 import json
 
@@ -17,7 +17,7 @@ def log_event(
     type: str,
     message: str,
     *,
-    data: Optional[Dict[str, Any]] = None,
+    data: Optional[dict[str, Any]] = None,
     job_id: Optional[str] = None,
     job_task_id: Optional[str] = None,
     source: str = "service:unknown",
